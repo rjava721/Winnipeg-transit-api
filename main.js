@@ -30,12 +30,10 @@ mainButton.addEventListener('click', function (event) {
     fetch(`https://api.winnipegtransit.com/v3/stops.json?street=${streetKey}&api-key=jJp4zgyfpCcZGyAYLyM`)
     .then((stopsFetch) => stopsFetch.json())
     .then((stopsData) => {
-      //console.log(stopsData);
-
+      //store all of the stop keys inside of an array
       stopsData.stops.forEach((element,index) => {
         streetStopsKeys[index] = element.key;
       })
-
       console.log("streetStopsKeys.length :" + streetStopsKeys.length);
 
       streetStopsKeys.forEach((element, index) => {
@@ -46,25 +44,13 @@ mainButton.addEventListener('click', function (event) {
         <h4>Cross-street: ${stopsData.stops[index]["cross-street"].name}</h4>
         <p>===============================================</p>
         </div`);
+        
         eachStop = document.getElementsByClassName('street-stop');
 
         fetch(`https://api.winnipegtransit.com/v3/stops/${element}/schedule.json?max-results-per-route=2&api-key=jJp4zgyfpCcZGyAYLyM`)
         .then(stopKeysFetch => stopKeysFetch.json()) 
         .then((parsedStopsKeys) =>  {
           console.log(parsedStopsKeys);
-          //console.log(parsedStopsKeys["stop-schedule"]["route-schedules"][index].route.number)
-          console.log('the length is ' + parsedStopsKeys["stop-schedule"]["route-schedules"].length);
-
-          parsedStopsKeys["stop-schedule"]["route-schedules"].forEach((element,index) => {
-
-            if(parsedStopsKeys["stop-schedule"]["route-schedules"].length !== 0) {// if there is no route schedule
-              console.log('lol' + parsedStopsKeys["stop-schedule"]["route-schedules"][index].route.number)
-              
-              for (let index = 0; index < eachStop.length; index++) {
-                eachStop[index].insertAdjacentHTML('beforeend', `
-                <h4>Estimated Arrival Time: </h4>`)
-              }
-            }
 
           })
         })
@@ -72,4 +58,3 @@ mainButton.addEventListener('click', function (event) {
     })
   .catch((data) => console.log(`mess ${data}`));
   })
-});
